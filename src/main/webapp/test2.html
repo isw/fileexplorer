@@ -1,0 +1,46 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <script type="text/javascript" src="jquery/jquery-1.6.4.js"></script>
+    <script type="text/javascript" src="jquery/jquery.atmosphere.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+          function callback(response) {
+            // Websocket events.
+            $.atmosphere.log('info', ["response.state: " + response.state]);
+            $.atmosphere.log('info', ["response.transport: " + response.transport]);
+            if (response.transport != 'polling' && response.state != 'connected' && response.state != 'closed') {
+                $.atmosphere.log('info', ["response.responseBody: " + response.responseBody]);
+                if (response.status == 200) {
+                    var data = response.responseBody;
+                    document.getElementById('response').innerHTML = data;
+                }
+            }
+        }
+
+        // You can set websocket, streaming or long-polling here.
+        var rq = {
+          url : "/fileexplorer/tail/abc",
+          transport : "long-polling"
+        };
+        rq.onMessage = function (rsp) {
+          if (rsp.status == 200) {
+            var data = rsp.responseBody;
+            $('#response').html(data);
+            this.requestCount = 0;
+          }
+        };
+        $.atmosphere.subscribe (rq);
+        /*
+        $.atmosphere.subscribe("/fileexplorer/tail/abc",
+                callback,
+                $.atmosphere.request = {transport: 'long-polling'});
+        */
+        
+        });
+    </script>
+</head>
+<body>
+<div id="response"></div>
+</body>
+</html>

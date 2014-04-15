@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+<Configure id="thisfile" class="org.eclipse.jetty.webapp.WebAppContext">
+  <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <!-- Arg><Ref id="services"/></Arg>  -->
+    <Arg>services</Arg>
+    <Arg type="java.lang.String">/home/usc/workspaces/fits/fileexplorer/config/services.yaml</Arg>
+    <Arg type="boolean">false</Arg>
+  </New>
+  <Call name="addAliasCheck">
+  <Arg><New class="org.eclipse.jetty.server.handler.ContextHandler$ApprovePathPrefixAliases"/></Arg>
+</Call>
+</Configure>
+
+
+

@@ -1,0 +1,6 @@
+<atmosphere-handlers>
+    <!-- Jersey -->
+    <atmosphere-handler support-session="false" context-root="/chat"
+                        class-name="de.innuendo.fileexplorer.servlets.TestHandler">
+    </atmosphere-handler>
+</atmosphere-handlers>

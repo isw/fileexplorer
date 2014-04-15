@@ -1,0 +1,34 @@
+{
+  "info" : 
+  {
+    "name" : "xplorer",
+
+    "summary" : "Custom Application",
+    "description" : "This is a skeleton for a custom application with qooxdoo.",
+    
+    "homepage" : "http://some.homepage.url/",
+
+    "license" : "SomeLicense",
+    "authors" : 
+    [
+      {
+        "name" : "Ulrich Schreiner",
+        "email" : "ulrich.schreiner@innuendo.de"
+      }
+    ],
+
+    "version" : "trunk",
+    "qooxdoo-versions": ["2.0"]
+  },
+  
+  "provides" : 
+  {
+    "namespace"   : "xplorer",
+    "encoding"    : "utf-8",
+    "class"       : "source/class",
+    "resource"    : "source/resource",
+    "translation" : "source/translation",
+    "type"        : "application"
+  }
+}
+

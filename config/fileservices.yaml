@@ -1,0 +1,92 @@
+# Interne Services, die Statful sind, d.h. pro Request neu erzeugt werden
+ClassBindings:
+  - !!de.innuendo.fileexplorer.config.ClassBinding
+    id : servletlogger
+    from : de.innuendo.fileexplorer.log.api.ILogger
+    to : de.innuendo.fileexplorer.log.impl.ServletLogger
+  - !!de.innuendo.fileexplorer.config.ClassBinding
+    id : messsageprovider
+    from : de.innuendo.fileexplorer.message.api.IMessageProvider
+    to : de.innuendo.fileexplorer.message.impl.DummyMessageProviderImpl
+
+ServiceBindings:
+  - !!de.innuendo.fileexplorer.config.ServiceBinding
+    id : authentication
+    instanceInterface : de.innuendo.fileexplorer.login.api.IAuthentication 
+    implementations: 
+      - !!de.innuendo.fileexplorer.login.impl.Authentication {
+          godrole : "AG101"
+        }
+
+  - !!de.innuendo.fileexplorer.config.ServiceBinding
+    id : jsonservices
+    instanceInterface : de.innuendo.fileexplorer.rpc.api.IRemoteService
+    implementations:
+      - !!de.innuendo.fileexplorer.services.core.Ping { 
+          name : "core.Ping"
+        }
+      - !!de.innuendo.fileexplorer.services.fs.ReadFileContents {
+          name : "fs.ReadFileContents"
+        }
+      - !!de.innuendo.fileexplorer.services.fs.ReadFolderContent {
+          name : "fs.ReadFolderContent"
+        }
+      - !!de.innuendo.fileexplorer.services.fs.GetFilesystems {
+          name : "fs.GetFilesystems"
+        }
+      - !!de.innuendo.fileexplorer.services.login.GetUser { 
+          name : "login.GetUser"
+        }
+      - !!de.innuendo.fileexplorer.services.fs.ZipFiles { 
+          name : "fs.ZipFiles"
+        }
+      - !!de.innuendo.fileexplorer.services.login.GetAuthenticators { 
+          name : "login.GetAuthenticators"
+        }
+      - !!de.innuendo.fileexplorer.services.login.LoginService { 
+          name : "login.Login"
+        }
+      - !!de.innuendo.fileexplorer.services.login.LogoutService { 
+          name : "login.Logout"
+        }
+            
+  - !!de.innuendo.fileexplorer.config.ServiceBinding
+    id : filesystems
+    instanceInterface : de.innuendo.fileexplorer.services.fs.api.IDirectory
+    implementations:
+      - !!de.innuendo.fileexplorer.services.fs.impl.Directory
+        id : dir.temp
+        path : "$HOME/temp"
+        label : "Temp"
+        showHiddenFiles : false
+      - !!de.innuendo.fileexplorer.services.fs.impl.Directory
+        id : dir.test
+        path : "$HOME/test"
+        label : "Tools"
+        showHiddenFiles : false
+    
+  - !!de.innuendo.fileexplorer.config.ServiceBinding
+    id : authenticators
+    instanceInterface : de.innuendo.fileexplorer.login.api.IUserAuthentication
+    implementations:
+      - !!de.innuendo.fileexplorer.login.impl.dummy.DummyAuthentication {
+          componentName : "dummyAuthenticator",
+          description : "Dummy Authenticator",
+          userCredentials: [
+            "test,test,AG101",
+            "test2,test2,AG102"
+          ]
+        }
+      - !!de.innuendo.fileexplorer.login.impl.ldap.LDAPAuthentication {
+          componentName : "ldapAuthenticator",
+          description : "My LDAP",
+          accessData : {
+             ldapServer : "ldap://ldaptestserver:389",
+             initialFactory : "com.sun.jndi.ldap.LdapCtxFactory",
+             base : "ou=baseunit,o=baseorg",
+             techUser : "cn=god,ou=sky,o=heaven",
+             techPassword : "ohmygod",
+             groupsQuery : "(&(objectclass=accessGroup)(member=%s))",
+             userQuery : "(cn=%s)"
+         }
+        }

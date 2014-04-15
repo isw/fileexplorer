@@ -1,0 +1,3 @@
+[submodule "src/main/webapp/qx"]
+	path = src/main/webapp/qx
+	url = https://github.com/qooxdoo/qooxdoo.git

@@ -1,0 +1,62 @@
+<html>
+<head>
+    <script type="text/javascript" src="jquery/jquery-1.6.4.js"></script>
+
+    <script type="text/javascript">
+
+    var scrollBottom = true;
+    var tailing = true;
+    
+    function bin2String(array) {
+      return String.fromCharCode.apply(String, array)
+        .replace(/\n/g,"<br/>")
+        .replace(/\r/g,"<br/>");
+    }
+    
+    function getURLParameter(name) {
+      return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
+    }
+    
+    function fetch (pos) {
+      $.ajax ({
+        data : {position:pos},
+        dataType : "json",
+        url : "/fileexplorer/tail2"+getURLParameter("pt"),
+        async : true,
+        type : "GET",
+        success : function (data, txtStat, jxhr) {
+        	if (!tailing) return;
+          if (data != null) {
+            var txt = $('#response').html(); 
+            $('#response').html(txt+bin2String(data.text));
+            if (scrollBottom)
+              $('#response')[0].scrollIntoView (false);
+            setTimeout (function(){fetch(data.position)},1);
+          }
+          else
+            setTimeout (function(){fetch(pos)},1);
+        }
+      });
+      
+    }
+        $(document).ready(function() {
+          $('#response').click (function () {
+            if (scrollBottom) {
+              scrollBottom = false;
+              $(this).css ("background-color", "f0f0f0");
+            } else {
+              scrollBottom = true;
+              $(this).css ("background-color", "white");
+            }
+          });
+          jQuery(window).bind("beforeunload", function(){
+        	  tailing = false;
+          });
+          fetch (0);
+        });
+    </script>
+</head>
+<body>
+<pre id="response"></pre>
+</body>
+</html>
