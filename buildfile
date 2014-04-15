@@ -29,5 +29,5 @@ task :package => [:qx]
 
 task :qx do
   puts 'BUILD qooxdoo application'
-  sh "cd src/main/webapp/xplorer && ./generate source-all"
+  sh "cd src/main/webapp/xplorer && ./generate build"
 end
